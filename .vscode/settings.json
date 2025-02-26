@@ -1,0 +1,11 @@
+{
+    "C_Cpp.intelliSenseEngine": "default",
+    "idf.adapterTargetName": "esp32c3",
+    "idf.openOcdConfigs": [
+        "board/esp32c3-builtin.cfg"
+    ],
+    "idf.flashType": "UART",
+    "idf.port": "/dev/ttyACM0",
+    "idf.espIdfPath": "/home/yjy/esp/v5.3.1/esp-idf",
+    "idf.toolsPath": "/home/yjy/.espressif"
+}
