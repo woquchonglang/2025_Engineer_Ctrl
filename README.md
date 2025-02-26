@@ -1,6 +1,7 @@
 # ✨Custom ctrl Server
 
 | Supported Targets | ESP32-C3 | ESP32-S3 |
+| ----------------- | -------- | -------- |
 
 ### 💻How to Use 
 本分支使用ESP-IDF 5.3.1 进行编译烧录
