@@ -3,14 +3,14 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-#define TXD_PIN        (17)
-#define RXD_PIN        (16)
+#define TXD_PIN        (35)
+#define RXD_PIN        (36)
 
 #define RX_BUFFER_SIZE (30U)
 
 extern float joint[7];
 
-void uart_init()
+void uart_init(void)
 {
     const uart_config_t uart_config = {
         .baud_rate = 115200,
@@ -25,6 +25,7 @@ void uart_init()
     uart_param_config(UART_NUM_1, &uart_config);
     uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
 }
+
 void uart_task(void *param)
 {
     uint8_t tx_buffer[39];

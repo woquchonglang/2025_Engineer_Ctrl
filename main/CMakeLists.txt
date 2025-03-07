@@ -17,8 +17,9 @@ endmacro()
 
 find_include_dir(INCLUDE_DIR_LIST main)
 
-file(GLOB_RECURSE SOURCE "hdl/*.*" "app/*.*" "algorithm/*.*" "hal/*.*" "ui/*.*")
+file(GLOB_RECURSE SOURCE "hdl/*.*" "app/*.*" "algorithm/*.*" "hal/*.*" "ui/MiaoUI/*.*" "ui/lib/*.*")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
 idf_component_register(
   SRCS

@@ -3,13 +3,16 @@
 #include "./buzzer.h"
 #include "driver/ledc.h"
 #include "freertos/FreeRTOS.h"
+#include "freertos/projdefs.h"
 #include "freertos/task.h"
+#include "esp_log.h"
+#include "portmacro.h"
 
 #define LEDC_TIMER     LEDC_TIMER_0
 #define LEDC_MODE      LEDC_LOW_SPEED_MODE
 #define LEDC_CHANNEL   LEDC_CHANNEL_0
 #define LEDC_DUTY_RES  LEDC_TIMER_13_BIT // Set duty resolution to 13 bits
-#define LEDC_DUTY      (4096)            // Set duty to 50%. (2 ** 13) * 50% = 4096
+#define LEDC_DUTY      (1000)            // Set duty to 50%. (2 ** 13) * 50% = 4096
 #define LEDC_FREQUENCY (4000)            // Frequency in Hertz. Set frequency at 4 kHz
 
 extern Buzzer buzzer;
@@ -52,14 +55,30 @@ void Buzzer::proc(uint32_t frequency, uint32_t duration)
     ESP_ERROR_CHECK(ledc_update_duty(LEDC_MODE, LEDC_CHANNEL));
 }
 
+int beep_cycle, beep_cnt, beep_cnt_loaded;
+
 void buzzer_task()
 {
     while (true) {
-        if (xSemaphoreTake(buzzer_xSemaphore, portMAX_DELAY) == pdTRUE) {
-            buzzer.proc(LEDC_FREQUENCY, 1000); // 例如，频率为4kHz，持续时间为1秒
+        if (ulTaskNotifyTake(pdTRUE, 10) == pdTRUE) {
+            beep_cycle = 2;
+            beep_cnt_loaded = 1;
+            beep_cnt = 0;
         }
-    vTaskDelay(100 / portTICK_PERIOD_MS);
+
+        if (beep_cycle > 0) {
+            if (beep_cnt > 0)
+                beep_cnt--;
+            else {
+                buzzer.proc(LEDC_FREQUENCY,
+                            ((beep_cycle + 1) % 2) * 40); // 例如，频率为4kHz，持续时间为1秒
+
+                beep_cnt = beep_cnt_loaded;
+                beep_cycle--;
+            }
+           
+        }
+
+        vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 }
-
-

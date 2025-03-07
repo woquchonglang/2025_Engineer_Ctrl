@@ -29,6 +29,7 @@ void Draw_Home(ui_t *ui);
 void Show_Version(ui_t *ui);
 void Show_Logo(ui_t *ui);
 void Show_Joints(ui_t *ui);
+void Move_goals(ui_t *ui);
 void TaskLvel_Setting(ui_t *ui);
 
 #ifdef __cplusplus

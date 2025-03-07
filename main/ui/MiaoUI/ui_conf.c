@@ -23,9 +23,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #include "version.h"
 
 /*Page*/
-ui_page_t Home_Page, System_Page,Money_Page;
+ui_page_t Home_Page, System_Page, Money_Page;
 /*item */
-ui_item_t HomeHead_Item, SystemHead_Item, System_Item, Image_Item, Github_Item, Bilibili_Item, Version_Item, Wave_Item, Money_Item;
+ui_item_t HomeHead_Item, SystemHead_Item, System_Item, Image_Item, Github_Item, Bilibili_Item,
+        Version_Item, Wave_Item, Money_Item,Move_Item;
 ui_item_t SystemHeap_Item;
 ui_item_t Contrast_Item, Power_Item, MenuColor_Item, CursorAni_Item, Test_Item, J1_Item;
 
@@ -61,10 +62,10 @@ void Create_Parameter(ui_t *ui)
     Power_element.data = &Power_switch_data;
     Create_element(&Power_Item, &Power_element);
 
-    #if ( UI_USE_FREERTOS == 1 )
+#if (UI_USE_FREERTOS == 1)
     extern QueueHandle_t WaveTest_Queue;
     extern TaskHandle_t WaveTestTask_Handle;
-    #endif
+#endif
     extern int Wave_TestData;
     static ui_data_t Wave_data;
     Wave_data.name = "Wave";
@@ -72,15 +73,15 @@ void Create_Parameter(ui_t *ui)
     Wave_data.dataType = UI_DATA_INT;
     Wave_data.max = 600;
     Wave_data.min = 0;
-    #if ( UI_USE_FREERTOS == 1 )
+#if (UI_USE_FREERTOS == 1)
     Wave_data.dataRootTask = &WaveTestTask_Handle;
     Wave_data.dataRootQueue = &WaveTest_Queue;
-    #endif
+#endif
     static ui_element_t Wave_element;
     Wave_element.data = &Wave_data;
     Create_element(&Wave_Item, &Wave_element);
 
-    #if ( UI_USE_FREERTOS == 1 )
+#if (UI_USE_FREERTOS == 1)
     extern char FreeHeap[20];
     static ui_data_t SystemHeap_data;
     SystemHeap_data.name = "FreeHeap";
@@ -90,7 +91,7 @@ void Create_Parameter(ui_t *ui)
     static ui_element_t SystemHeap_element;
     SystemHeap_element.data = &SystemHeap_data;
     Create_element(&SystemHeap_Item, &SystemHeap_element);
-    #endif
+#endif
 
     static ui_data_t MenuColor_data;
     MenuColor_data.name = "MenuColor";
@@ -148,21 +149,27 @@ void Create_Text(ui_t *ui)
 void Create_MenuTree(ui_t *ui)
 {
     AddPage("[HomePage]", &Home_Page, UI_PAGE_ICON);
-        AddItem("[HomePage]", UI_ITEM_ONCE_FUNCTION, logo_allArray[0], &HomeHead_Item, &Home_Page, NULL, Draw_Home);
-        AddItem(" [Exchange]", UI_ITEM_ONCE_FUNCTION, logo_allArray[7], &Money_Item, &Home_Page, NULL, Show_Joints);
-        AddItem(" [System]", UI_ITEM_PARENTS, logo_allArray[1], &System_Item, &Home_Page, &System_Page, NULL);
-            AddPage("[System]", &System_Page, UI_PAGE_TEXT);
-                AddItem("[System]", UI_ITEM_RETURN, NULL, &SystemHead_Item, &System_Page, &Home_Page, NULL);
-                AddItem(" -Menu Color", UI_ITEM_DATA, NULL, &MenuColor_Item, &System_Page, NULL, NULL);   
-                AddItem(" -Cursor Ani", UI_ITEM_DATA, NULL, &CursorAni_Item, &System_Page, NULL, NULL);
-        // AddItem(" -Image", UI_ITEM_LOOP_FUNCTION, logo_allArray[2], &Image_Item, &Home_Page, NULL, Show_Logo);
-        // AddItem(" -Github", UI_ITEM_WORD, logo_allArray[3], &Github_Item, &Home_Page, NULL, NULL);
-        AddItem(" [Version]", UI_ITEM_ONCE_FUNCTION, logo_allArray[5], &Version_Item, &Home_Page, NULL, Show_Version);
-        // AddItem(" -Wave", UI_ITEM_WAVE, logo_allArray[6], &Wave_Item, &Home_Page, NULL, NULL);
+    AddItem("[HomePage]", UI_ITEM_ONCE_FUNCTION, logo_allArray[0], &HomeHead_Item, &Home_Page, NULL,
+            Draw_Home);
+    AddItem(" [Exchange]", UI_ITEM_ONCE_FUNCTION, logo_allArray[7], &Money_Item, &Home_Page, NULL,
+            Show_Joints);
+    // AddItem(" [Move_goals]", UI_ITEM_ONCE_FUNCTION, logo_allArray[7], &Move_Item, &Home_Page, NULL,
+    //         Move_goals);
+    AddItem(" [System]", UI_ITEM_PARENTS, logo_allArray[1], &System_Item, &Home_Page, &System_Page,
+            NULL);
+    AddPage("[System]", &System_Page, UI_PAGE_TEXT);
+    AddItem("[System]", UI_ITEM_RETURN, NULL, &SystemHead_Item, &System_Page, &Home_Page, NULL);
+    AddItem(" -Menu Color", UI_ITEM_DATA, NULL, &MenuColor_Item, &System_Page, NULL, NULL);
+    AddItem(" -Cursor Ani", UI_ITEM_DATA, NULL, &CursorAni_Item, &System_Page, NULL, NULL);
+    // AddItem(" -Image", UI_ITEM_LOOP_FUNCTION, logo_allArray[2], &Image_Item, &Home_Page, NULL, Show_Logo);
+    // AddItem(" -Github", UI_ITEM_WORD, logo_allArray[3], &Github_Item, &Home_Page, NULL, NULL);
+    AddItem(" [Version]", UI_ITEM_ONCE_FUNCTION, logo_allArray[5], &Version_Item, &Home_Page, NULL,
+            Show_Version);
+    // AddItem(" -Wave", UI_ITEM_WAVE, logo_allArray[6], &Wave_Item, &Home_Page, NULL, NULL);
 }
 
 void MiaoUi_Setup(ui_t *ui)
 {
-  Create_UI(ui, &Money_Item); // 创建UI, 必须给定一个头项目
-  Draw_Home(ui);
+    Create_UI(ui, &Money_Item); // 创建UI, 必须给定一个头项目
+    Draw_Home(ui);
 }

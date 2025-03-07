@@ -7,8 +7,7 @@
 extern "C" {
 #endif
 
-static void button_event_cb(void *arg, void *data);
-void button_init(uint32_t button_num);
+void button_click_init(uint32_t button_num);
 void button_up_init(uint32_t button_num);
 void button_down_init(uint32_t button_num);
 

@@ -216,7 +216,7 @@ void Show_Version(ui_t *ui)
             value = (int16_t )UI_Animation(50, (float )value, &ui->animation.textPage_ani);
             Disp_DrawXBMP(0, 0, 45, 60, AUTHOR);
             Disp_SetFont(font_home_h6w4);
-            Disp_DrawStr(value, 6, "Author:YJY & CYY");
+            Disp_DrawStr(value, 6, "Author:YJY & CYY & TQS");
             Disp_DrawStr(value, 18, "UI:MiaoUI");
             Disp_DrawStr(value, 30, "Version:0.1");
             Disp_DrawStr(value, 42, "OS:FreeRTOS v10.3");
@@ -240,15 +240,14 @@ void Show_Logo(ui_t *ui)
     Disp_SendBuffer();
 }
 
-extern float joint[7];
+extern float joint[7];   // BUG: waiting to fix
 extern bool pump;
 
 void Show_Joints(ui_t *ui) {
 
   char joint_tmp[7][20]= {0}; // 缓冲区用于存储浮点数的字符串表示
 
-
-
+  
   while (1) {
     
     if (indevScan() == UI_ACTION_ENTER)
@@ -282,6 +281,66 @@ void Show_Joints(ui_t *ui) {
     vTaskDelay(10 / portTICK_PERIOD_MS);
   }
 }
+
+void Move_goals(ui_t *ui)
+{
+  char joint_tmp[7][20] = { 0 }; // 缓冲区用于存储浮点数的字符串表示
+
+
+  while (1) {
+    if (indevScan() == UI_ACTION_ENTER)
+        return;
+
+    for (int8_t i = 0; i < 8; i++) {
+        sprintf(&joint_tmp[i], "%.2f", joint[i]);
+    }
+
+    Disp_ClearBuffer();
+
+    
+
+    Disp_SendBuffer();
+    vTaskDelay(10 / portTICK_PERIOD_MS);
+  }
+}
+
+// void Teach(ui_t *ui)
+// {
+//   char joint_tmp[7][20] = { 0 }; // 缓冲区用于存储浮点数的字符串表示
+
+
+//   while (1) {
+//     if (indevScan() == UI_ACTION_ENTER)
+//         return;
+
+//     for (int8_t i = 0; i < 8; i++) {
+//         sprintf(&joint_tmp[i], "%.2f", joint[i]);
+//     }
+
+//     Disp_ClearBuffer();
+
+//     Disp_SetFont(UI_FONT);
+//     Disp_DrawStr(0, 12, "J1: ");
+//     Disp_DrawStr(0, 24, "J2: ");
+//     Disp_DrawStr(0, 36, "J3: ");
+//     Disp_DrawStr(0, 48, "J4: ");
+//     Disp_DrawStr(0, 60, "J5: ");
+//     Disp_DrawStr(64, 12, "J6: ");
+//     Disp_DrawStr(64, 24, "J7: ");
+//     Disp_DrawStr(64, 36, "Pump: ");
+
+//     for (int8_t i = 0; i < 5; i++) {
+//         Disp_DrawStr(24, 12 * (i + 1), joint_tmp[i]);
+//     }
+//     for (int8_t i = 5; i < 7; i++) {
+//         Disp_DrawStr(88, 12 * (i - 4), joint_tmp[i]);
+//     }
+//     Disp_DrawStr(100, 36, pump ? "on" : "off");
+
+//     Disp_SendBuffer();
+//     vTaskDelay(10 / portTICK_PERIOD_MS);
+//   }
+// }
 
 #if ( UI_USE_FREERTOS == 1 )
 void TaskLvel_Setting(ui_t *ui)
