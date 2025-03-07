@@ -114,7 +114,7 @@ float mt6701_pwm::getSensorAngle()
 
 int mt6701_pwm::getRawCount()
 {
-    int pulse_count = 0;
+     int pulse_count = 0;
     int event_count = 0;
     if (xQueueReceive(pcnt.queue, &event_count, pdMS_TO_TICKS(100))) {
         ESP_LOGI(TAG, "Watch point event, count: %d", event_count);

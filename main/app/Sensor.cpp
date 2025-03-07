@@ -3,6 +3,7 @@
 #include "../hdl/soft_iic_as5600.h"
 #include "../hdl/soft_iic_mt6701.h"
 #include "as5600.h"
+#include "driver/gpio.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
@@ -17,10 +18,23 @@ float joint[7] = { 0 };
 
 
 extern AS5600 joint1;
-extern AS5600 joint2;
+extern MT6701 joint2;
 extern mt6701_pwm joint3;
 extern soft_AS5600 joint4;
 extern soft_MT6701 joint5;
+extern soft_MT6701 joint7;
+// extern MT6701 joint7;
+
+void sensor_init()
+{
+    // joint1.init();
+    // joint2.init();
+    // joint3.init();
+    // joint4.init();
+    // joint5.init();
+    // joint6.init();
+    joint7.init();
+}
 
 void sensor_task(void *param)
 {
@@ -37,15 +51,15 @@ void sensor_task(void *param)
 
     while (1) {
         // joint_1 = joint1.getSensorAngle();
-        // joint_2 = joint2.getSensorAngle();
-        // joint[2] = joint2.getSensorAngle();
-        float joint3_angle = joint3.getSensorAngle();
+        // joint[1] = joint2.getSensorAngle();
+        joint[6] = joint7.getSensorAngle();
+        // float joint3_angle = joint3.getSensorAngle();
 
-        joint[2] = 1.0;
 
-        // ESP_LOGI(TAG, "%f\n", joint[2]);
+        // ESP_LOGI("TAG", "",);
+        // ESP_LOGI("TAG", "angle: %f, GPIO level: %d\n", joint[2] ,gpio_get_level(GPIO_NUM_8));
         // ESP_LOGI(TAG, "%f,%f,%f\n", joint_1, joint_2, joint_3);
-        // ESP_LOGI(TAG, "%f\n", joint3_angle);
+        // ESP_LOGI("TAG", "%f\n", joint[6]);
 
         for (int i = 0; i < 7; i++) {
             tx_data.ctrl_data.joints[i] = (joint[i]);

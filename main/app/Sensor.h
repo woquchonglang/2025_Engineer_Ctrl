@@ -37,6 +37,7 @@ typedef struct {
 #pragma pack()
 
 float *get_angle();
+void sensor_init();
 void sensor_task(void *param);
 
 #endif
