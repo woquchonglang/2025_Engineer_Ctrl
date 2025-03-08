@@ -1,18 +1,12 @@
-/*
- * SPDX-FileCopyrightText: 2021-2024 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Unlicense OR CC0-1.0
- */
-
-/****************************************************************************
- *
- * This demo showcases BLE GATT client. It can scan BLE devices and connect to
- *one device. Run the gatt_server demo, the client demo will automatically
- *connect to the gatt_server demo. Client demo will enable gatt_server's notify
- *after connection. The two devices will then exchange data.
- *
- ****************************************************************************/
-
+#include "esp_bt.h"
+#include "esp_bt_main.h"
+#include "esp_gap_ble_api.h"
+#include "esp_gatt_common_api.h"
+#include "esp_gatt_defs.h"
+#include "esp_gattc_api.h"
+#include "esp_log.h"
+#include "esp_timer.h"
+#include "freertos/FreeRTOS.h"
 #include "freertos/idf_additions.h"
 #include "nvs.h"
 #include "nvs_flash.h"
@@ -21,16 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "esp_bt.h"
-#include "esp_bt_main.h"
-#include "esp_gap_ble_api.h"
-#include "esp_gatt_common_api.h"
-#include "esp_gatt_defs.h"
-#include "esp_gattc_api.h"
-#include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-
-#define GATTC_TAG "GATTC_DEMO"
+#define GATTC_TAG "BT_CLIENT"
 #define REMOTE_SERVICE_UUID 0x00FF
 #define REMOTE_NOTIFY_CHAR_UUID 0xFF01
 #define PROFILE_NUM 1
@@ -308,16 +293,7 @@ static void gattc_profile_event_handler(esp_gattc_cb_event_t event,
     break;
   }
   case ESP_GATTC_NOTIFY_EVT:
-    // if (p_data->notify.is_notify) {
-    //   ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive notify value:");
-    // } else {
-    //   ESP_LOGI(GATTC_TAG, "ESP_GATTC_NOTIFY_EVT, receive indicate value:");
-    // }
-    // esp_log_buffer_hex(GATTC_TAG, p_data->notify.value,
-    //                    p_data->notify.value_len);  // INFO: Debug
-
-    xQueueSend(joint_queue, p_data->notify.value, 10);
-    // ESP_LOGI(GATTC_TAG, "xQueueSend");
+    xQueueSend(joint_queue, p_data->notify.value, 0);
 
     break;
   case ESP_GATTC_WRITE_DESCR_EVT:
@@ -396,22 +372,6 @@ static void esp_gap_cb(esp_gap_ble_cb_event_t event,
                                    ESP_BLE_AD_TYPE_NAME_CMPL, &adv_name_len);
       ESP_LOGI(GATTC_TAG, "searched Device Name Len %d", adv_name_len);
       esp_log_buffer_char(GATTC_TAG, adv_name, adv_name_len);
-
-#if CONFIG_EXAMPLE_DUMP_ADV_DATA_AND_SCAN_RESP
-      if (scan_result->scan_rst.adv_data_len > 0) {
-        ESP_LOGI(GATTC_TAG, "adv data:");
-        esp_log_buffer_hex(GATTC_TAG, &scan_result->scan_rst.ble_adv[0],
-                           scan_result->scan_rst.adv_data_len);
-      }
-      if (scan_result->scan_rst.scan_rsp_len > 0) {
-        ESP_LOGI(GATTC_TAG, "scan resp:");
-        esp_log_buffer_hex(
-            GATTC_TAG,
-            &scan_result->scan_rst.ble_adv[scan_result->scan_rst.adv_data_len],
-            scan_result->scan_rst.scan_rsp_len);
-      }
-#endif
-      ESP_LOGI(GATTC_TAG, " ");
 
       if (adv_name != NULL) {
         if (strlen(remote_device_name) == adv_name_len &&
