@@ -13,6 +13,7 @@
 
 ### ❗NOTE
 先让server上电,再让client上电,等待client连接即可传输
+串口发送频率约25hz
 
 
 

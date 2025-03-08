@@ -3,13 +3,14 @@
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "esp_log.h"
+#include "esp_timer.h" 
+#include <stdint.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/idf_additions.h"
 #include "string.h"
-#include <stdint.h>
 
-#define TXD_PIN (GPIO_NUM_4)
-#define RXD_PIN (GPIO_NUM_5)
+#define TXD_PIN (GPIO_NUM_21)
+#define RXD_PIN (GPIO_NUM_20)
 
 #define TX_BUF_SIZE 1024
 
@@ -29,30 +30,35 @@ void uart_init(void) {
                UART_PIN_NO_CHANGE);
 }
 
+float get_freq(void) {
+  int64_t current_time = esp_timer_get_time();
+  static int64_t last_time = 0;
+  float frequency = 1000000.0 / (current_time - last_time);
+  last_time = current_time;
+  return frequency;
+}
+
 void tx_task(void *param) {
-  // TickType_t xLastWakeTime;
-  // xLastWakeTime = xTaskGetTickCount();
-
   uint8_t tx_data[39];
-  tx_data_t *tx_da = NULL;
+  tx_data_t *tx_tmp = NULL;
   float joint[7] = {0};
-
-  uint16_t cnt = 0;
-
+  TickType_t xLastWakeTime = xTaskGetTickCount();
   while (1) {
     if (xQueueReceive(param, &tx_data, 0) == pdTRUE) {
       if (Verify_CRC8_Check_Sum((uint8_t *)tx_data, sizeof(frame_header_t)) &&
-          Verify_CRC16_Check_Sum((uint8_t *)tx_data, sizeof(tx_data_t))) {  
+          Verify_CRC16_Check_Sum((uint8_t *)tx_data, sizeof(tx_data_t))) {
 
-        tx_da = (tx_data_t *)&tx_data;
-        joint[2] = (float)(tx_da->ctrl_data.joints[2]);
+        tx_tmp = (tx_data_t *)&tx_data;
+        for(int i = 0; i < 7; i++) {
+          joint[i] = (float)(tx_tmp->ctrl_data.joints[i]);
+          // ESP_LOGI("TX_TASK", "joint[%d]: %f", i, joint[i]);
+        }
+ 
+        // ESP_LOGI("TX_TASK", "Frequency: %f", get_freq());
 
-        ESP_LOGI("TX_TASK", "joint[%d]: %f", 2, joint[2]);
-
-        vTaskDelay(100);
-
-      } else {
+        uart_write_bytes(UART_NUM_1, tx_data, sizeof(tx_data_t));
       }
     }
+    vTaskDelayUntil(&(xLastWakeTime), (40 / portTICK_PERIOD_MS));
   }
 }
