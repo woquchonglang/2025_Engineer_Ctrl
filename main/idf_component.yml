@@ -1,0 +1,5 @@
+## IDF Component Manager Manifest File
+dependencies:
+  ningzixi/ws2812_control: "^1.2.0"
+
+  idf: "^5.3.1"
