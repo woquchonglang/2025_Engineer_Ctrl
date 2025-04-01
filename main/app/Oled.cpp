@@ -123,17 +123,16 @@ void oled_task()
     ui_t ui;
 
     u8g2_Setup_ssd1306_i2c_128x64_noname_f(&u8g2, U8G2_R0, u8x8_byte_i2c, u8x8_gpio_and_delay);
+    u8g2_SetI2CAddress(&u8g2, SSD1306_I2C_ADDRESS);
     u8g2_InitDisplay(&u8g2);
     u8g2_SetPowerSave(&u8g2, 0);
     u8g2_ClearBuffer(&u8g2);
     u8g2_SendBuffer(&u8g2); // 清屏
     ESP_LOGI(TAG, "u8g2 init done");
-    Disp_DrawLine(0, 0, 128, 64);
-    u8g2_SendBuffer(&u8g2); // 清屏
-    // MiaoUi_Setup(&ui);
+    MiaoUi_Setup(&ui);
 
     while (1) {
-        // ui_loop(&ui);
+        ui_loop(&ui);
         vTaskDelay(10 / portTICK_PERIOD_MS);
     }
 }
