@@ -3,7 +3,7 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "math.h"
-#include "../hal/soft_iic.h"
+#include "../../hal/soft_iic.h"
 
 
 static const char *TAG = "MT6701";

@@ -1,7 +1,5 @@
 #include "./app/Oled.h"
-#include "./hdl/mt6701_pwm.h"
-#include "./hdl/soft_iic_as5600.h"
-#include "./hdl/soft_iic_mt6701.h"
+#include "./hdl/sensor/sensor.h"
 #include "app/Mpu6050.h"
 #include "app/Uart.h"
 #include "app/Sensor.h"
@@ -11,8 +9,8 @@
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "hdl/button.h"
-#include "hdl/buzzer.h"
+#include "hdl/button/button.h"
+#include "hdl/buzzer/buzzer.h"
 #include "sdkconfig.h"
 #include "soc/gpio_num.h"
 #include <stdint.h>
@@ -26,11 +24,11 @@ extern "C" {
 bool pump = false;
 }
 
-Buzzer buzzer(GPIO_NUM_8);
-// AS5600 joint1 = AS5600(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2);
-// MT6701 joint2 = MT6701(I2C_NUM_1, GPIO_NUM_2, GPIO_NUM_1);
-// AS5600 joint4 = AS5600(I2C_NUM_1, GPIO_NUM_42, GPIO_NUM_41);
-// MT6701 joint5 = MT6701(I2C_NUM_1, GPIO_NUM_42, GPIO_NUM_41);
+Buzzer buzzer(GPIO_NUM_10);
+// As5600 joint1 = As5600(I2C_NUM_0, GPIO_NUM_1, GPIO_NUM_2);
+// Mt6701 joint2 = Mt6701(I2C_NUM_1, GPIO_NUM_2, GPIO_NUM_1);
+// As5600 joint4 = As5600(I2C_NUM_1, GPIO_NUM_42, GPIO_NUM_41);
+// Mt6701 joint5 = Mt6701(I2C_NUM_1, GPIO_NUM_42, GPIO_NUM_41);
 
 // mt6701_pwm joint3(GPIO_NUM_8, 994, 4119, 16, 4111);
 // soft_AS5600 joint6;
@@ -42,9 +40,9 @@ extern "C" void app_main(void)
 {
     nvs_init();
     buzzer.init();
-    button_up_init(9);     // up
-    button_click_init(10); // enter
-    button_down_init(11);  // down
+    button_up_init(8);     // up
+    button_click_init(18); // enter
+    button_down_init(3);  // down
     // sensor_init();
     // uart_init();
 

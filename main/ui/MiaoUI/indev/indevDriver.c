@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "indevDriver.h"
-#include "../../../hdl/button.h"
+#include "../../../hdl/button/button.h"
 
 UI_ACTION indevScan(void)
 {

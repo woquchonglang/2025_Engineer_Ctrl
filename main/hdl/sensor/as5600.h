@@ -10,7 +10,7 @@
 #include "driver/gpio.h"
 #include "driver/i2c.h"
 
-class AS5600 : public Sensor {
+class As5600 : public Sensor {
 public:
   /**
    * @brief Construct a new as5600 object
@@ -19,32 +19,32 @@ public:
    * @param scl_io
    * @param sda_io
    */
-  AS5600(i2c_port_t i2c_port, gpio_num_t scl_io, gpio_num_t sda_io);
+    As5600(i2c_port_t i2c_port, gpio_num_t scl_io, gpio_num_t sda_io);
 
-  /**
+    /**
    * @brief Destroy the as5600 object
    *
    */
-  ~AS5600();
+    ~As5600();
 
-  /**
+    /**
    * @brief Init i2c for as5600
    *
    */
-  void init();
+    void init();
 
-  /**
+    /**
    * @brief Deinit i2c for as5600
    *
    */
-  void deinit();
+    void deinit();
 
-  /**
+    /**
    * @brief Get the output of as5600
    *
    * @return float
    */
-  float getSensorAngle();
+    float getSensorAngle();
 
 private:
   i2c_port_t _i2c_port;

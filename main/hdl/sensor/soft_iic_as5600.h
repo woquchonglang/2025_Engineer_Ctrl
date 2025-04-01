@@ -5,7 +5,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#include "../hal/soft_iic.h"
+#include "../../hal/soft_iic.h"
 }
 #endif
 

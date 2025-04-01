@@ -5,7 +5,7 @@
  */
 
 #include "button.h"
-#include "../ui/MiaoUI/ui_conf.h"
+#include "../../ui/MiaoUI/ui_conf.h"
 #include "esp_idf_version.h"
 #include "esp_log.h"
 #include "esp_pm.h"

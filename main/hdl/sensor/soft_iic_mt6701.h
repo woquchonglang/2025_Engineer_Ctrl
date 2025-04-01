@@ -9,7 +9,7 @@
 
 #include "common/base_classes/Sensor.h"
 #include "driver/gpio.h"
-#include "../hal/soft_iic.h"
+#include "../../hal/soft_iic.h"
 #include <cstdint>
 #include <sys/types.h>
 

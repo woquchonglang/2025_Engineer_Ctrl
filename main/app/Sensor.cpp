@@ -1,7 +1,5 @@
 #include "Sensor.h"
-#include "../hdl/mt6701_pwm.h"
-#include "../hdl/soft_iic_as5600.h"
-#include "../hdl/soft_iic_mt6701.h"
+#include "../hdl/sensor/sensor.h"
 #include "as5600.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
@@ -17,13 +15,13 @@
 float joint[7] = { 0 };
 
 
-extern AS5600 joint1;
-extern MT6701 joint2;
+extern As5600 joint1;
+extern Mt6701 joint2;
 extern mt6701_pwm joint3;
 extern soft_AS5600 joint4;
 extern soft_MT6701 joint5;
 extern soft_MT6701 joint7;
-// extern MT6701 joint7;
+// extern Mt6701 joint7;
 
 void sensor_init()
 {
